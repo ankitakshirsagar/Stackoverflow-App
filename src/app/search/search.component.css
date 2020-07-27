@@ -1,0 +1,17 @@
+.radio-group {
+  display: flex;
+  flex-direction: row;
+  margin: 15px 0;
+}
+
+.radio-button {
+  margin-right: 10px;
+}
+
+.grey.darken-3 {
+  background-color: #424242 !important;
+}
+
+.ngx-pagination .current {
+  background-color: #424242 !important;
+}

@@ -1,0 +1,16 @@
+<div class="row" style="padding-top: 15px; padding-bottom: 15px;">
+  <div class="col-md-3">
+    <p>Votes : {{ votes }}</p>
+    <p>Answers : {{ answerCount }}</p>
+  </div>
+  <div class="col-md-6">
+    <a href="{{ questionLink }}">{{ questionTitle }}</a>
+    <!-- {{questionBody}} -->
+  </div>
+  <div class="col-md-3">
+    <p>
+      answered {{ creationDate | date }} by
+      <a href="{{ ownerLink }}">{{ userName }}</a>
+    </p>
+  </div>
+</div>

@@ -1,0 +1,47 @@
+<div class="container">
+  <div class="row">
+    <nav class="grey darken-3">
+      <div class="container-fluid navbar">
+        <h1 style="color: antiquewhite; text-align: center; padding-top: 10px;">Stackoverflow Search</h1>
+      </div>
+    </nav>
+    <div class="col-md-9">
+      <input id="search-box" type="input" #searchquery placeholder="What're you searching for?"
+        class="form-control form-control-underlined" (keydown.enter)="onSubmit(searchquery)" />
+    </div>
+    <div class="col-md-3">
+      <button type="submit" class="btn btn-primary rounded-pill btn-block shadow-sm" style="background-color: #424242;"
+        (click)="onSubmit(searchquery)">
+        Search
+      </button>
+    </div>
+    <div class="col-md-9">
+      <mat-radio-group class="radio-group">
+        <mat-radio-button class="radio-button" *ngFor="let selected of allSort" [value]="selected"
+          [checked]="selected === 'relevance'" (change)="radioSortChange($event)">
+          {{ selected }}
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <div class="col-md-4">
+      <mat-radio-group class="radio-group">
+        <mat-radio-button class="radio-button" *ngFor="let order of orders" [value]="order" [checked]="order === 'desc'"
+          (change)="radioOrderChange($event)">
+          {{ order }}
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div *ngFor="
+          let question of resultOfSearch
+            | paginate: { itemsPerPage: 10, currentPage: page }
+        ">
+        <app-questions [data]="question"></app-questions>
+      </div>
+      <pagination-controls style="text-align: center; font-size: 20px;" (pageChange)="onPageChange($event)">
+      </pagination-controls>
+    </div>
+  </div>
+</div>
