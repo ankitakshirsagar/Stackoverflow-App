@@ -54,7 +54,6 @@ export class SearchComponent implements OnInit {
       .subscribe(
         (responseData) => {
           this.setData(responseData);
-          console.log(responseData);
         },
         (error) => {
           console.log(error);

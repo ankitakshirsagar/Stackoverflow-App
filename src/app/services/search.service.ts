@@ -36,7 +36,7 @@ export class SearchService {
             let obj = new QuestionModel(
               tags,
               item['owner'].display_name,
-              new Date(item['creation_date']),
+              new Date(item['creation_date'] * 1000),
               item['answer_count'],
               item['score'],
               item['body'],
