@@ -1,3 +1,4 @@
+import { TagDetailModel } from './../Model/tag-detail.model';
 import { QuestionModel } from './../Model/question.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -10,9 +11,16 @@ export class SearchService {
   constructor(private http: HttpClient) {}
 
   questionArray: QuestionModel[];
+  tagdetails: TagDetailModel[];
   baseUrl = 'https://api.stackexchange.com/2.2/';
 
-  getResult(value: string, Page: number, sort: string, order: string) {
+  getResult(
+    value: string,
+    Page: number,
+    sort: string,
+    order: string,
+    mytag: string
+  ) {
     //console.log('service ' + sort);
     //console.log('service ' + order);
     return this.http
@@ -26,6 +34,8 @@ export class SearchService {
           sort +
           '&q=' +
           value +
+          '&tagged=' +
+          mytag +
           '&site=stackoverflow&filter=!9_bDDxJY5'
       )
       .pipe(
@@ -51,6 +61,22 @@ export class SearchService {
             questionArray: this.questionArray,
             hasMore: responseData['has_more'],
           };
+        })
+      );
+  }
+
+  getTagDetails(mytag: string) {
+    return this.http
+      .get(this.baseUrl + 'tags/' + mytag + '/wikis?site=stackoverflow')
+      .pipe(
+        map((detailsdata) => {
+          console.log(detailsdata);
+          let obj = new TagDetailModel(
+            detailsdata['items']['0'].excerpt,
+            detailsdata['items']['0'].tag_name,
+            detailsdata['has_more']
+          );
+          return obj;
         })
       );
   }

@@ -1,0 +1,37 @@
+<div class="row" style="padding-top: 15px; padding-bottom: 15px;">
+  <!-- <p>{{ excerpt }}</p> -->
+
+  <div class="col-md-3">
+    <p>Votes : {{ votes }}</p>
+    <p>Answers : {{ answerCount }}</p>
+  </div>
+  <div class="col-md-6">
+    <a href="{{ questionLink }}">Q: {{ questionTitle }}</a>
+    <div
+      innerHTML=" {{
+        questionBody.length > 100
+          ? (questionBody | slice: 0:180) + '...'
+          : questionBody
+      }}"
+    ></div>
+    <div *ngFor="let tag of tags" style="display: inline;">
+      <button
+        type="button"
+        class="btn btn-default"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="Tooltip on bottom"
+        #element
+        (click)="onTagClick($event)"
+      >
+        {{ tag }}
+      </button>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <p>
+      asked {{ creationDate | date }} by
+      <a href="{{ ownerLink }}">{{ userName }}</a>
+    </p>
+  </div>
+</div>

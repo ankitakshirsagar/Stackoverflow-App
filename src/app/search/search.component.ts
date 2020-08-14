@@ -1,3 +1,4 @@
+import { TagDetailModel } from './../Model/tag-detail.model';
 import { QuestionModel } from './../Model/question.model';
 import { SearchService } from './../services/search.service';
 import { Component, OnInit, Input } from '@angular/core';
@@ -22,6 +23,9 @@ export class SearchComponent implements OnInit {
   allSort: string[] = ['relevance', 'votes', 'activity', 'creation'];
   orderBy: string = 'desc';
   orders: string[] = ['desc', 'asc'];
+  mytag: string = '';
+  tag_details: TagDetailModel;
+  tagExcerpt: string;
 
   constructor(private searchService: SearchService) {}
 
@@ -40,17 +44,24 @@ export class SearchComponent implements OnInit {
   onSubmit(query: HTMLInputElement) {
     this.onResetVariables();
     this.queryData = query.value;
-    this.getSearchResults(this.queryData, 1, this.allSort[0], this.orders[0]);
+    this.getSearchResults(
+      this.queryData,
+      1,
+      this.allSort[0],
+      this.orders[0],
+      ''
+    );
   }
 
   getSearchResults(
     searchString,
     pageNo?: number,
     sortBy?: string,
-    orderBy?: string
+    orderBy?: string,
+    mytag?: string
   ) {
     this.searchService
-      .getResult(searchString, pageNo, sortBy, orderBy)
+      .getResult(searchString, pageNo, sortBy, orderBy, mytag)
       .subscribe(
         (responseData) => {
           this.setData(responseData);
@@ -76,7 +87,8 @@ export class SearchComponent implements OnInit {
         this.queryData,
         this.pageToGo,
         this.sortBy,
-        this.orderBy
+        this.orderBy,
+        this.mytag
       );
       this.num1 += 3;
     }
@@ -89,7 +101,8 @@ export class SearchComponent implements OnInit {
       this.queryData,
       this.pageToGo,
       this.sortBy,
-      this.orderBy
+      this.orderBy,
+      this.mytag
     );
   }
 
@@ -100,7 +113,37 @@ export class SearchComponent implements OnInit {
       this.queryData,
       this.pageToGo,
       this.sortBy,
-      this.orderBy
+      this.orderBy,
+      this.mytag
     );
+  }
+
+  receiveTag(event: string) {
+    this.onResetVariables();
+    this.mytag = event;
+    this.receiveTagDetails(this.mytag);
+    this.getSearchResults(
+      this.queryData,
+      this.pageToGo,
+      this.sortBy,
+      this.orderBy,
+      this.mytag
+    );
+  }
+
+  receiveTagDetails(mytag: string) {
+    this.searchService.getTagDetails(mytag).subscribe(
+      (detailsData: TagDetailModel) => {
+        this.setTagDetails(detailsData);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
+
+  setTagDetails(tagdata: TagDetailModel) {
+    this.tag_details = tagdata;
+    console.log('component: ' + this.tag_details.has_more);
   }
 }

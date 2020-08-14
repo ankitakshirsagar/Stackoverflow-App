@@ -1,5 +1,7 @@
-import { QuestionModel } from './../Model/question.model';
-import { Component, OnInit, Input } from '@angular/core';
+import { SearchService } from './../../services/search.service';
+import { QuestionModel } from './../../Model/question.model';
+import { TagDetailModel } from './../../Model/tag-detail.model';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-questions',
@@ -8,7 +10,11 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class QuestionsComponent implements OnInit {
   @Input('data') data: QuestionModel;
-  constructor() {}
+  @Input('tagdetails') tagdetails: TagDetailModel;
+  @Output() sendTag = new EventEmitter<string>();
+  tagclicked = false;
+
+  constructor(private searchService: SearchService) {}
 
   tags: string[];
   userName: string;
@@ -21,6 +27,9 @@ export class QuestionsComponent implements OnInit {
   isAnswered: boolean;
   ownerLink: string;
 
+  // excerpt: string;
+  // tag_name: string;
+
   ngOnInit(): void {
     this.tags = this.data['tags'];
     this.userName = this.data['userName'];
@@ -32,5 +41,15 @@ export class QuestionsComponent implements OnInit {
     this.questionTitle = this.data['questionTitle'];
     this.isAnswered = this.data['isAnswered'];
     this.ownerLink = this.data['ownerlink'];
+
+    // this.excerpt = this.tagdetails['excerpt'];
+    // this.tag_name = this.tagdetails['tag_name'];
+  }
+
+  onTagClick($event: any) {
+    this.tagclicked = true;
+    console.log(this.tagclicked);
+    let tag = $event.target.innerText;
+    this.sendTag.emit(tag);
   }
 }
